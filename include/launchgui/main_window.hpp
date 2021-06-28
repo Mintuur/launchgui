@@ -61,9 +61,12 @@ public Q_SLOTS:
     void Start();
     void All_stop();
 
+    void updateState();
+
 private:
 	Ui::MainWindowDesign ui;
 	QNode qnode;
+        QPixmap m_lightimg[2];
 };
 
 }  // namespace launchgui

@@ -20,10 +20,12 @@
 //    https://bugreports.qt.io/browse/QTBUG-22829
 #ifndef Q_MOC_RUN
 #include <ros/ros.h>
-#endif
+
 #include <string>
 #include <QThread>
 #include <QStringListModel>
+#include <std_msgs/UInt16.h>
+#endif
 
 
 /*****************************************************************************
@@ -45,6 +47,13 @@ public:
 	bool init(const std::string &master_url, const std::string &host_url);
 	void run();
 
+        void A_state_Callback(const std_msgs::UInt16& state_msg);
+        void D_state_Callback(const std_msgs::UInt16& state_msg);
+        void O_state_Callback(const std_msgs::UInt16& state_msg);
+        void P_state_Callback(const std_msgs::UInt16& state_msg);
+        void S_state_Callback(const std_msgs::UInt16& state_msg);
+        void blackout(int a);
+
 	/*********************
 	** Logging
 	**********************/
@@ -62,19 +71,21 @@ public:
 Q_SIGNALS:
 	void loggingUpdated();
     void rosShutdown();
-    void AutoDriving();
-    void Door();
-    void Obstacle();
-    void Parking();
-    void Stair();
-    void Start();
-    void All_stop();
+
+    void statusUpdated();
 
 private:
 	int init_argc;
 	char** init_argv;
         ros::Publisher mission_publisher;
-    QStringListModel logging_model;
+
+        ros::Subscriber A_state_subscriber;
+        ros::Subscriber D_state_subscriber;
+        ros::Subscriber O_state_subscriber;
+        ros::Subscriber S_state_subscriber;
+        ros::Subscriber P_state_subscriber;
+
+        QStringListModel logging_model;
 };
 
 }  // namespace launchgui

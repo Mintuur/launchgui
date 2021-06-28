@@ -23,7 +23,10 @@ namespace launchgui {
 int ros_topic_data;
 bool ros_status_flag = 0;
 
+extern int State[5];
+
 using namespace Qt;
+
 
 /*****************************************************************************
 ** Implementation [MainWindow]
@@ -54,6 +57,8 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
         on_button_connect_clicked(true);
     }
 
+    QObject::connect(&qnode, SIGNAL(statusUpdated()), this, SLOT(updateState()));
+
     QObject::connect(ui.Button_AutoDriving, SIGNAL(clicked()), this, SLOT(AutoDriving()));
     QObject::connect(ui.Button_Door, SIGNAL(clicked()), this, SLOT(Door()));
     QObject::connect(ui.Button_Obstacle, SIGNAL(clicked()), this, SLOT(Obstacle()));
@@ -61,7 +66,20 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
     QObject::connect(ui.Button_Stair, SIGNAL(clicked()), this, SLOT(Stair()));
     QObject::connect(ui.Button_Start, SIGNAL(clicked()), this, SLOT(Start()));
     QObject::connect(ui.Button_All_stop, SIGNAL(clicked()), this, SLOT(All_stop()));
+
+
+    //QObject::connect(ui.comboBox, SIGNAL(currentTextChanged()), this, SLOT(textChanged()));
+    //QObject::connect(ui.Pause, SIGNAL(clicked()), this, SLOT(Pause()));
+
+
+    /*********************
+    ** Label
+    **********************/
+
+   m_lightimg[0].load(":/images/led-off.png");
+   m_lightimg[1].load(":/images/led-on.png");
 }
+
 
 MainWindow::~MainWindow() {}
 
@@ -127,6 +145,56 @@ void MainWindow::updateLoggingView() {
         ui.view_logging->scrollToBottom();
 }
 
+void MainWindow::updateState() {
+    if(State[0] == 1){
+        ui.state_label_1->setPixmap(m_lightimg[1]);
+    }
+    else{
+        ui.state_label_1->setPixmap(m_lightimg[0]);
+    }
+
+    if(State[1] == 1){
+        ui.state_label_2->setPixmap(m_lightimg[1]);
+    }
+    else{
+        ui.state_label_2->setPixmap(m_lightimg[0]);
+    }
+
+    if(State[2] == 1){
+        ui.state_label_3->setPixmap(m_lightimg[1]);
+    }
+    else{
+        ui.state_label_3->setPixmap(m_lightimg[0]);
+    }
+
+    if(State[3] == 1){
+        ui.state_label_4->setPixmap(m_lightimg[1]);
+    }
+    else{
+        ui.state_label_4->setPixmap(m_lightimg[0]);
+    }
+
+    if(State[4] == 1){
+        ui.state_label_5->setPixmap(m_lightimg[1]);
+    }
+    else{
+        ui.state_label_5->setPixmap(m_lightimg[0]);
+    }
+
+}
+
+/*
+void MainWindow::textChanged() {
+    int current_text = comboBox->currenText();
+
+
+}
+
+void MainWindow::Pause() {
+
+}
+*/
+
 void MainWindow::AutoDriving() {
     ros_topic_data = 1;
     ros_status_flag = true;
@@ -160,6 +228,7 @@ void MainWindow::Start() {
 void MainWindow::All_stop() {
     ros_topic_data = 9;
     ros_status_flag = true;
+
 }
 
 /*****************************************************************************

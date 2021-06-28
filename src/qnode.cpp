@@ -14,8 +14,8 @@
 #include <ros/network.h>
 #include <string>
 #include <std_msgs/String.h>
-#include <std_msgs/UInt16.h>
 #include <std_msgs/Float64.h>
+#include <std_msgs/Bool.h>
 #include <sstream>
 #include "../include/launchgui/qnode.hpp"
 
@@ -23,16 +23,26 @@
 ** Namespaces
 *****************************************************************************/
 
+
+
 namespace launchgui {
 
 /*****************************************************************************
 ** Implementation
 *****************************************************************************/
 
+int State[5];
+
 extern int ros_topic_data;
 extern bool ros_status_flag;
 
 std_msgs::UInt16 msg;
+
+std_msgs::UInt16 Autodriving_state;
+std_msgs::UInt16 Door_state;
+std_msgs::UInt16 Obstacle_state;
+std_msgs::UInt16 Parking_state;
+std_msgs::UInt16 Stair_state;
 
 QNode::QNode(int argc, char** argv ) :
 	init_argc(argc),
@@ -56,6 +66,12 @@ bool QNode::init() {
 	ros::NodeHandle n;
 	// Add your ros communications here.
         mission_publisher = n.advertise<std_msgs::UInt16>("mission", 10);
+
+        A_state_subscriber = n.subscribe("autodriving_state", 1000,  &QNode::A_state_Callback, this); //mission state
+        D_state_subscriber = n.subscribe("door_state", 1000,  &QNode::D_state_Callback, this);
+        O_state_subscriber = n.subscribe("obstacle_state", 1000,  &QNode::O_state_Callback, this);
+        S_state_subscriber = n.subscribe("stair_state", 1000,  &QNode::S_state_Callback, this);
+        P_state_subscriber = n.subscribe("parking_state", 1000,  &QNode::P_state_Callback, this);
 	start();
 	return true;
 }
@@ -72,12 +88,27 @@ bool QNode::init(const std::string &master_url, const std::string &host_url) {
 	ros::NodeHandle n;
 	// Add your ros communications here.
         mission_publisher = n.advertise<std_msgs::UInt16>("mission", 10);
+
+        A_state_subscriber = n.subscribe("autodriving_state", 1000,  &QNode::A_state_Callback, this); //mission state
+        D_state_subscriber = n.subscribe("door_state", 1000,  &QNode::D_state_Callback, this);
+        O_state_subscriber = n.subscribe("obstacle_state", 1000,  &QNode::O_state_Callback, this);
+        S_state_subscriber = n.subscribe("stair_state", 1000,  &QNode::S_state_Callback, this);
+        P_state_subscriber = n.subscribe("parking_state", 1000,  &QNode::P_state_Callback, this);
 	start();
 	return true;
 }
 
 void QNode::run() {
         ros::Rate loop_rate(10);
+        ros::NodeHandle n;
+
+        A_state_subscriber = n.subscribe("autodriving_state", 1000,  &QNode::A_state_Callback, this); //mission state
+        D_state_subscriber = n.subscribe("door_state", 1000,  &QNode::D_state_Callback, this);
+        O_state_subscriber = n.subscribe("obstacle_state", 1000,  &QNode::O_state_Callback, this);
+        S_state_subscriber = n.subscribe("stair_state", 1000,  &QNode::S_state_Callback, this);
+        P_state_subscriber = n.subscribe("parking_state", 1000,  &QNode::P_state_Callback, this);
+
+
 	int count = 0;
         while ( ros::ok() ) {
             if(ros_status_flag == true) {
@@ -85,14 +116,58 @@ void QNode::run() {
                 mission_publisher.publish(msg);
                 ros_status_flag = false;
             }
+            blackout(0);
+
 		ros::spinOnce();
 		loop_rate.sleep();
 		++count;
 	}
+
+        State[0] = 0;
+
+        ros::spin();
 	std::cout << "Ros shutdown, proceeding to close the gui." << std::endl;
 	Q_EMIT rosShutdown(); // used to signal the gui for a shutdown (useful to roslaunch)
 }
 
+void QNode::A_state_Callback(const std_msgs::UInt16& state_msg){
+    State[0] = state_msg.data;
+
+        Q_EMIT statusUpdated();
+}
+
+void QNode::D_state_Callback(const std_msgs::UInt16& state_msg){
+    State[1] = state_msg.data;
+
+        Q_EMIT statusUpdated();
+}
+
+void QNode::O_state_Callback(const std_msgs::UInt16& state_msg){
+    State[2] = state_msg.data;
+
+        Q_EMIT statusUpdated();
+}
+
+void QNode::P_state_Callback(const std_msgs::UInt16& state_msg){
+    State[3] = state_msg.data;
+
+        Q_EMIT statusUpdated();
+}
+
+void QNode::S_state_Callback(const std_msgs::UInt16& state_msg){
+    State[4] = state_msg.data;
+
+        Q_EMIT statusUpdated();
+}
+
+void QNode::blackout(int a){
+
+    for(int i=0; i<5; i++) {
+        State[i] = a;
+    }
+
+    Q_EMIT statusUpdated();
+}
 
 void QNode::log( const LogLevel &level, const std::string &msg) {
 	logging_model.insertRows(logging_model.rowCount(),1);
