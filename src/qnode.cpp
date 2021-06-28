@@ -132,31 +132,26 @@ void QNode::run() {
 
 void QNode::A_state_Callback(const std_msgs::UInt16& state_msg){
     State[0] = state_msg.data;
-
         Q_EMIT statusUpdated();
 }
 
 void QNode::D_state_Callback(const std_msgs::UInt16& state_msg){
     State[1] = state_msg.data;
-
         Q_EMIT statusUpdated();
 }
 
 void QNode::O_state_Callback(const std_msgs::UInt16& state_msg){
     State[2] = state_msg.data;
-
         Q_EMIT statusUpdated();
 }
 
 void QNode::P_state_Callback(const std_msgs::UInt16& state_msg){
     State[3] = state_msg.data;
-
         Q_EMIT statusUpdated();
 }
 
 void QNode::S_state_Callback(const std_msgs::UInt16& state_msg){
     State[4] = state_msg.data;
-
         Q_EMIT statusUpdated();
 }
 

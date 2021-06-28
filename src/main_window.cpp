@@ -64,8 +64,15 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
     QObject::connect(ui.Button_Obstacle, SIGNAL(clicked()), this, SLOT(Obstacle()));
     QObject::connect(ui.Button_Parking, SIGNAL(clicked()), this, SLOT(Parking()));
     QObject::connect(ui.Button_Stair, SIGNAL(clicked()), this, SLOT(Stair()));
-    QObject::connect(ui.Button_Start, SIGNAL(clicked()), this, SLOT(Start()));
+
+    QObject::connect(ui.Button_Start, SIGNAL(clicked()), this, SLOT(Start()));    
     QObject::connect(ui.Button_All_stop, SIGNAL(clicked()), this, SLOT(All_stop()));
+
+    QObject::connect(ui.Off_AutoDriving, SIGNAL(clicked()), this, SLOT(Off_auto()));
+    QObject::connect(ui.Off_Door, SIGNAL(clicked()), this, SLOT(Off_door()));
+    QObject::connect(ui.Off_Obstacle, SIGNAL(clicked()), this, SLOT(Off_obstacle()));
+    QObject::connect(ui.Off_Parking, SIGNAL(clicked()), this, SLOT(Off_parking()));
+    QObject::connect(ui.Off_Stair, SIGNAL(clicked()), this, SLOT(Off_stair()));
 
 
     //QObject::connect(ui.comboBox, SIGNAL(currentTextChanged()), this, SLOT(textChanged()));
@@ -198,26 +205,36 @@ void MainWindow::Pause() {
 void MainWindow::AutoDriving() {
     ros_topic_data = 1;
     ros_status_flag = true;
+
+    ui.mode_ready -> setText("Auto Driving");
 }
 
 void MainWindow::Door() {
     ros_topic_data = 2;
     ros_status_flag = true;
+
+    ui.mode_ready -> setText("Open Door");
 }
 
 void MainWindow::Obstacle() {
     ros_topic_data = 3;
     ros_status_flag = true;
+
+    ui.mode_ready -> setText("Obstacle");
 }
 
 void MainWindow::Parking() {
     ros_topic_data = 4;
     ros_status_flag = true;
+
+    ui.mode_ready -> setText("Parking");
 }
 
 void MainWindow::Stair() {
     ros_topic_data = 5;
     ros_status_flag = true;
+
+    ui.mode_ready -> setText("Stair");
 }
 
 void MainWindow::Start() {
@@ -228,8 +245,37 @@ void MainWindow::Start() {
 void MainWindow::All_stop() {
     ros_topic_data = 9;
     ros_status_flag = true;
-
 }
+
+/*****************************************************************************
+** Stop the selected thing
+*****************************************************************************/
+
+void MainWindow::Off_auto() {
+    ros_topic_data = 11;
+    ros_status_flag = true;
+}
+
+void MainWindow::Off_door() {
+    ros_topic_data = 12;
+    ros_status_flag = true;
+}
+
+void MainWindow::Off_obstacle() {
+    ros_topic_data = 13;
+    ros_status_flag = true;
+}
+
+void MainWindow::Off_parking() {
+    ros_topic_data = 14;
+    ros_status_flag = true;
+}
+
+void MainWindow::Off_stair() {
+    ros_topic_data = 15;
+    ros_status_flag = true;
+}
+
 
 /*****************************************************************************
 ** Implementation [Menu]

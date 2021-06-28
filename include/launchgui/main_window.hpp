@@ -61,6 +61,12 @@ public Q_SLOTS:
     void Start();
     void All_stop();
 
+    void Off_auto();
+    void Off_door();
+    void Off_obstacle();
+    void Off_parking();
+    void Off_stair();
+
     void updateState();
 
 private:
