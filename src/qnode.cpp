@@ -76,6 +76,7 @@ bool QNode::init() {
         S_state_subscriber = n.subscribe("stair_state", 1000,  &QNode::S_state_Callback, this);
         P_state_subscriber = n.subscribe("parking_state", 1000,  &QNode::P_state_Callback, this);
         MD_state_subscriber = n.subscribe("md_driver_status", 1000, &QNode::MD_state_Callback, this);
+        JOY_state_subscriber = n.subscribe("rosjoy_status", 1000, &QNode::JOY_state_Callback, this);
 	start();
 	return true;
 }
@@ -101,7 +102,7 @@ bool QNode::init(const std::string &master_url, const std::string &host_url) {
         S_state_subscriber = n.subscribe("stair_state", 1000,  &QNode::S_state_Callback, this);
         P_state_subscriber = n.subscribe("parking_state", 1000,  &QNode::P_state_Callback, this);
         MD_state_subscriber = n.subscribe("md_driver_status", 1000, &QNode::MD_state_Callback, this);
-        JOY_state_subscriber = n.subscribe("rosjoy_status", 1000, &QNode::MD_state_Callback, this);
+        JOY_state_subscriber = n.subscribe("rosjoy_status", 1000, &QNode::JOY_state_Callback, this);
 	start();
 	return true;
 }
@@ -118,7 +119,7 @@ void QNode::run() {
         S_state_subscriber = n.subscribe("stair_state", 1000,  &QNode::S_state_Callback, this);
         P_state_subscriber = n.subscribe("parking_state", 1000,  &QNode::P_state_Callback, this);
         MD_state_subscriber = n.subscribe("md_driver_status", 1000, &QNode::MD_state_Callback, this);
-        JOY_state_subscriber = n.subscribe("rosjoy_status", 1000, &QNode::MD_state_Callback, this);
+        JOY_state_subscriber = n.subscribe("rosjoy_status", 1000, &QNode::JOY_state_Callback, this);
 
 
 	int count = 0;
