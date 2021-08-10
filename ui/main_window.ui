@@ -14,7 +14,7 @@
    <string>QRosApp</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources/images.qrc">
+   <iconset>
     <normaloff>:/images/icon.png</normaloff>:/images/icon.png</iconset>
   </property>
   <property name="locale">
@@ -130,7 +130,7 @@
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap resource="../resources/images.qrc">:/images/led-off.png</pixmap>
+          <pixmap>:/images/led-off.png</pixmap>
          </property>
         </widget>
         <widget class="QLabel" name="state_label_2">
@@ -146,7 +146,7 @@
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap resource="../resources/images.qrc">:/images/led-off.png</pixmap>
+          <pixmap>:/images/led-off.png</pixmap>
          </property>
         </widget>
         <widget class="QLabel" name="state_label_3">
@@ -162,7 +162,7 @@
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap resource="../resources/images.qrc">:/images/led-off.png</pixmap>
+          <pixmap>:/images/led-off.png</pixmap>
          </property>
         </widget>
         <widget class="QLabel" name="state_label_4">
@@ -178,7 +178,7 @@
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap resource="../resources/images.qrc">:/images/led-off.png</pixmap>
+          <pixmap>:/images/led-off.png</pixmap>
          </property>
         </widget>
         <widget class="QLabel" name="state_label_5">
@@ -194,7 +194,7 @@
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap resource="../resources/images.qrc">:/images/led-off.png</pixmap>
+          <pixmap>:/images/led-off.png</pixmap>
          </property>
         </widget>
         <widget class="QPushButton" name="Off_AutoDriving">
@@ -312,7 +312,7 @@
          <string>Get Mission</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="Button_Web">
+       <widget class="QPushButton" name="Button_Joy">
         <property name="geometry">
          <rect>
           <x>330</x>
@@ -322,7 +322,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Web Refresh</string>
+         <string>JoyStick</string>
         </property>
        </widget>
        <widget class="QLabel" name="get_ready">
@@ -338,7 +338,7 @@
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap resource="../resources/images.qrc">:/images/switch2.jpg</pixmap>
+         <pixmap>:/images/switch2.jpg</pixmap>
         </property>
        </widget>
        <widget class="QLCDNumber" name="lcdNumber_sec">
@@ -494,7 +494,36 @@
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap resource="../resources/images.qrc">:/images/led-off.png</pixmap>
+         <pixmap>:/images/led-off.png</pixmap>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="Off_Joy">
+        <property name="geometry">
+         <rect>
+          <x>530</x>
+          <y>20</y>
+          <width>51</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Off</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="state_label_7">
+        <property name="geometry">
+         <rect>
+          <x>480</x>
+          <y>20</y>
+          <width>67</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>:/images/led-off.png</pixmap>
         </property>
        </widget>
       </widget>
@@ -742,9 +771,7 @@
    </property>
   </action>
  </widget>
- <resources>
-  <include location="../resources/images.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>action_Quit</sender>

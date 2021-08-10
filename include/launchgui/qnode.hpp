@@ -53,6 +53,7 @@ public:
         void P_state_Callback(const std_msgs::UInt16& state_msg);
         void S_state_Callback(const std_msgs::UInt16& state_msg);
         void MD_state_Callback(const std_msgs::UInt16& state_msg);
+        void JOY_state_Callback(const std_msgs::UInt16& state_msg);
         void blackout(int a);
         void getready_Callback(const std_msgs::UInt16& ready);
 
@@ -89,6 +90,7 @@ private:
         ros::Subscriber S_state_subscriber;
         ros::Subscriber P_state_subscriber;
         ros::Subscriber MD_state_subscriber;
+        ros::Subscriber JOY_state_subscriber;
 
         QStringListModel logging_model;
 };

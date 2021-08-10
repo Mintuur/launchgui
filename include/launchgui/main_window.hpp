@@ -60,6 +60,8 @@ public Q_SLOTS:
     void Stair();
     void Start();
     void MD();
+    void JOY();
+
     void All_stop();
 
     void Off_auto();
@@ -68,8 +70,7 @@ public Q_SLOTS:
     void Off_parking();
     void Off_stair();
     void Off_MD();
-
-    void Refresh_Web();
+    void Off_JOY();
 
     void updateState();
     void getReady();

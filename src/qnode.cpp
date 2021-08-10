@@ -31,7 +31,7 @@ namespace launchgui {
 ** Implementation
 *****************************************************************************/
 
-int State[5];
+int State[7];
 int Ready;
 
 extern int ros_topic_data;
@@ -101,6 +101,7 @@ bool QNode::init(const std::string &master_url, const std::string &host_url) {
         S_state_subscriber = n.subscribe("stair_state", 1000,  &QNode::S_state_Callback, this);
         P_state_subscriber = n.subscribe("parking_state", 1000,  &QNode::P_state_Callback, this);
         MD_state_subscriber = n.subscribe("md_driver_status", 1000, &QNode::MD_state_Callback, this);
+        JOY_state_subscriber = n.subscribe("rosjoy_status", 1000, &QNode::MD_state_Callback, this);
 	start();
 	return true;
 }
@@ -117,6 +118,7 @@ void QNode::run() {
         S_state_subscriber = n.subscribe("stair_state", 1000,  &QNode::S_state_Callback, this);
         P_state_subscriber = n.subscribe("parking_state", 1000,  &QNode::P_state_Callback, this);
         MD_state_subscriber = n.subscribe("md_driver_status", 1000, &QNode::MD_state_Callback, this);
+        JOY_state_subscriber = n.subscribe("rosjoy_status", 1000, &QNode::MD_state_Callback, this);
 
 
 	int count = 0;
@@ -170,9 +172,14 @@ void QNode::MD_state_Callback(const std_msgs::UInt16& state_msg){
         Q_EMIT statusUpdated();
 }
 
+void QNode::JOY_state_Callback(const std_msgs::UInt16& state_msg){
+    State[6] = state_msg.data;
+        Q_EMIT statusUpdated();
+}
+
 void QNode::blackout(int a){
 
-    for(int i=0; i<6; i++) {
+    for(int i=0; i<7; i++) {
         State[i] = a;
     }
     Ready = a;

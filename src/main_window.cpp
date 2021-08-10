@@ -23,7 +23,7 @@ namespace launchgui {
 int ros_topic_data;
 bool ros_status_flag = 0;
 
-extern int State[5];
+extern int State[7];
 extern int Ready;
 
 using namespace Qt;
@@ -71,6 +71,7 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
     QObject::connect(ui.Button_Stair, SIGNAL(clicked()), this, SLOT(Stair()));
 
     QObject::connect(ui.Button_md, SIGNAL(clicked()), this, SLOT(MD()));
+    QObject::connect(ui.Button_Joy, SIGNAL(clicked()), this, SLOT(JOY()));
 
     QObject::connect(ui.Button_Start, SIGNAL(clicked()), this, SLOT(Start()));    
     QObject::connect(ui.Button_All_stop, SIGNAL(clicked()), this, SLOT(All_stop()));
@@ -82,6 +83,7 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
     QObject::connect(ui.Off_Stair, SIGNAL(clicked()), this, SLOT(Off_stair()));
 
     QObject::connect(ui.Off_md, SIGNAL(clicked()), this, SLOT(Off_MD()));
+    QObject::connect(ui.Off_Joy, SIGNAL(clicked()), this, SLOT(Off_JOY()));
 
 
 
@@ -206,6 +208,13 @@ void MainWindow::updateState() {
         ui.state_label_6->setPixmap(m_lightimg[0]);
     }
 
+    if(State[6] == 1){
+        ui.state_label_7->setPixmap(m_lightimg[1]);
+    }
+    else{
+        ui.state_label_7->setPixmap(m_lightimg[0]);
+    }
+
 }
 
 void MainWindow::getReady() {
@@ -258,6 +267,11 @@ void MainWindow::MD() {
     ros_status_flag = true;
 }
 
+void MainWindow::JOY() {
+    ros_topic_data = 70;
+    ros_status_flag = true;
+}
+
 void MainWindow::Start() {
     ros_topic_data = 0;
     ros_status_flag = true;
@@ -302,8 +316,8 @@ void MainWindow::Off_MD() {     //md_driver
     ros_status_flag = true;
 }
 
-void MainWindow::Refresh_Web() {
-    ros_topic_data = 99;
+void MainWindow::Off_JOY() {     //md_driver
+    ros_topic_data = 71;
     ros_status_flag = true;
 }
 
