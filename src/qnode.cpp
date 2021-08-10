@@ -32,6 +32,7 @@ namespace launchgui {
 *****************************************************************************/
 
 int State[5];
+int Ready;
 
 extern int ros_topic_data;
 extern bool ros_status_flag;
@@ -65,13 +66,16 @@ bool QNode::init() {
 	ros::start(); // explicitly needed since our nodehandle is going out of scope.
 	ros::NodeHandle n;
 	// Add your ros communications here.
-        mission_publisher = n.advertise<std_msgs::UInt16>("mission", 10);
+        mission_publisher = n.advertise<std_msgs::UInt16>("mission", 1);
+
+        get_Ready_subscriber = n.subscribe("getmission_ready", 1000, &QNode::getready_Callback, this);
 
         A_state_subscriber = n.subscribe("autodriving_state", 1000,  &QNode::A_state_Callback, this); //mission state
         D_state_subscriber = n.subscribe("door_state", 1000,  &QNode::D_state_Callback, this);
         O_state_subscriber = n.subscribe("obstacle_state", 1000,  &QNode::O_state_Callback, this);
         S_state_subscriber = n.subscribe("stair_state", 1000,  &QNode::S_state_Callback, this);
         P_state_subscriber = n.subscribe("parking_state", 1000,  &QNode::P_state_Callback, this);
+        MD_state_subscriber = n.subscribe("md_driver_status", 1000, &QNode::MD_state_Callback, this);
 	start();
 	return true;
 }
@@ -87,13 +91,16 @@ bool QNode::init(const std::string &master_url, const std::string &host_url) {
 	ros::start(); // explicitly needed since our nodehandle is going out of scope.
 	ros::NodeHandle n;
 	// Add your ros communications here.
-        mission_publisher = n.advertise<std_msgs::UInt16>("mission", 10);
+        mission_publisher = n.advertise<std_msgs::UInt16>("mission", 1);
+
+        get_Ready_subscriber = n.subscribe("getmission_ready", 1000, &QNode::getready_Callback, this);
 
         A_state_subscriber = n.subscribe("autodriving_state", 1000,  &QNode::A_state_Callback, this); //mission state
         D_state_subscriber = n.subscribe("door_state", 1000,  &QNode::D_state_Callback, this);
         O_state_subscriber = n.subscribe("obstacle_state", 1000,  &QNode::O_state_Callback, this);
         S_state_subscriber = n.subscribe("stair_state", 1000,  &QNode::S_state_Callback, this);
         P_state_subscriber = n.subscribe("parking_state", 1000,  &QNode::P_state_Callback, this);
+        MD_state_subscriber = n.subscribe("md_driver_status", 1000, &QNode::MD_state_Callback, this);
 	start();
 	return true;
 }
@@ -102,11 +109,14 @@ void QNode::run() {
         ros::Rate loop_rate(10);
         ros::NodeHandle n;
 
+        get_Ready_subscriber = n.subscribe("getmission_ready", 1000, &QNode::getready_Callback, this);
+
         A_state_subscriber = n.subscribe("autodriving_state", 1000,  &QNode::A_state_Callback, this); //mission state
         D_state_subscriber = n.subscribe("door_state", 1000,  &QNode::D_state_Callback, this);
         O_state_subscriber = n.subscribe("obstacle_state", 1000,  &QNode::O_state_Callback, this);
         S_state_subscriber = n.subscribe("stair_state", 1000,  &QNode::S_state_Callback, this);
         P_state_subscriber = n.subscribe("parking_state", 1000,  &QNode::P_state_Callback, this);
+        MD_state_subscriber = n.subscribe("md_driver_status", 1000, &QNode::MD_state_Callback, this);
 
 
 	int count = 0;
@@ -155,14 +165,26 @@ void QNode::S_state_Callback(const std_msgs::UInt16& state_msg){
         Q_EMIT statusUpdated();
 }
 
+void QNode::MD_state_Callback(const std_msgs::UInt16& state_msg){
+    State[5] = state_msg.data;
+        Q_EMIT statusUpdated();
+}
+
 void QNode::blackout(int a){
 
-    for(int i=0; i<5; i++) {
+    for(int i=0; i<6; i++) {
         State[i] = a;
     }
+    Ready = a;
 
     Q_EMIT statusUpdated();
 }
+
+void QNode::getready_Callback(const std_msgs::UInt16& ready){
+    Ready = ready.data;
+        Q_EMIT statusUpdated();
+}
+
 
 void QNode::log( const LogLevel &level, const std::string &msg) {
 	logging_model.insertRows(logging_model.rowCount(),1);
@@ -200,3 +222,6 @@ void QNode::log( const LogLevel &level, const std::string &msg) {
 }
 
 }  // namespace launchgui
+
+
+//md_driver_status int number 1

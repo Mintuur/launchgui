@@ -15,7 +15,6 @@
 #include <QtGui/QMainWindow>
 #include "ui_main_window.h"
 #include "qnode.hpp"
-
 /*****************************************************************************
 ** Namespace
 *****************************************************************************/
@@ -28,6 +27,7 @@ namespace launchgui {
 /**
  * @brief Qt central, all operations relating to the view part here.
  */
+
 class MainWindow : public QMainWindow {
 Q_OBJECT
 
@@ -59,6 +59,7 @@ public Q_SLOTS:
     void Parking();
     void Stair();
     void Start();
+    void MD();
     void All_stop();
 
     void Off_auto();
@@ -66,13 +67,19 @@ public Q_SLOTS:
     void Off_obstacle();
     void Off_parking();
     void Off_stair();
+    void Off_MD();
+
+    void Refresh_Web();
 
     void updateState();
+    void getReady();
 
 private:
 	Ui::MainWindowDesign ui;
 	QNode qnode;
         QPixmap m_lightimg[2];
+        QPixmap m_readyimg[2];
+
 };
 
 }  // namespace launchgui

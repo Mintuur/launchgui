@@ -52,7 +52,9 @@ public:
         void O_state_Callback(const std_msgs::UInt16& state_msg);
         void P_state_Callback(const std_msgs::UInt16& state_msg);
         void S_state_Callback(const std_msgs::UInt16& state_msg);
+        void MD_state_Callback(const std_msgs::UInt16& state_msg);
         void blackout(int a);
+        void getready_Callback(const std_msgs::UInt16& ready);
 
 	/*********************
 	** Logging
@@ -79,11 +81,14 @@ private:
 	char** init_argv;
         ros::Publisher mission_publisher;
 
+        ros::Subscriber get_Ready_subscriber;
+
         ros::Subscriber A_state_subscriber;
         ros::Subscriber D_state_subscriber;
         ros::Subscriber O_state_subscriber;
         ros::Subscriber S_state_subscriber;
         ros::Subscriber P_state_subscriber;
+        ros::Subscriber MD_state_subscriber;
 
         QStringListModel logging_model;
 };

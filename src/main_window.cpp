@@ -24,18 +24,19 @@ int ros_topic_data;
 bool ros_status_flag = 0;
 
 extern int State[5];
+extern int Ready;
 
 using namespace Qt;
-
 
 /*****************************************************************************
 ** Implementation [MainWindow]
 *****************************************************************************/
 
 MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
-	: QMainWindow(parent)
+        : QMainWindow(parent)
 	, qnode(argc,argv)
 {
+
 	ui.setupUi(this); // Calling this incidentally connects all ui's triggers to on_...() callbacks in this class.
     QObject::connect(ui.actionAbout_Qt, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt())); // qApp is a global variable for the application
 
@@ -58,12 +59,18 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
     }
 
     QObject::connect(&qnode, SIGNAL(statusUpdated()), this, SLOT(updateState()));
+    QObject::connect(&qnode, SIGNAL(statusUpdated()), this, SLOT(getReady()));
+
+    //QObject::connect(ui.Button_getmission, SIGNAL(clicked()), this, SLOT(launch_getmission()));
+    //QObject::connect(ui.Button_Web, SIGNAL(clicked()), this, SLOT(Refresh_Web()));
 
     QObject::connect(ui.Button_AutoDriving, SIGNAL(clicked()), this, SLOT(AutoDriving()));
     QObject::connect(ui.Button_Door, SIGNAL(clicked()), this, SLOT(Door()));
     QObject::connect(ui.Button_Obstacle, SIGNAL(clicked()), this, SLOT(Obstacle()));
     QObject::connect(ui.Button_Parking, SIGNAL(clicked()), this, SLOT(Parking()));
     QObject::connect(ui.Button_Stair, SIGNAL(clicked()), this, SLOT(Stair()));
+
+    QObject::connect(ui.Button_md, SIGNAL(clicked()), this, SLOT(MD()));
 
     QObject::connect(ui.Button_Start, SIGNAL(clicked()), this, SLOT(Start()));    
     QObject::connect(ui.Button_All_stop, SIGNAL(clicked()), this, SLOT(All_stop()));
@@ -74,9 +81,8 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
     QObject::connect(ui.Off_Parking, SIGNAL(clicked()), this, SLOT(Off_parking()));
     QObject::connect(ui.Off_Stair, SIGNAL(clicked()), this, SLOT(Off_stair()));
 
+    QObject::connect(ui.Off_md, SIGNAL(clicked()), this, SLOT(Off_MD()));
 
-    //QObject::connect(ui.comboBox, SIGNAL(currentTextChanged()), this, SLOT(textChanged()));
-    //QObject::connect(ui.Pause, SIGNAL(clicked()), this, SLOT(Pause()));
 
 
     /*********************
@@ -85,6 +91,11 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
 
    m_lightimg[0].load(":/images/led-off.png");
    m_lightimg[1].load(":/images/led-on.png");
+
+   m_readyimg[0].load(":/images/switch2.jpg");
+   m_readyimg[1].load(":/images/switch1.jpg");
+
+
 }
 
 
@@ -188,19 +199,24 @@ void MainWindow::updateState() {
         ui.state_label_5->setPixmap(m_lightimg[0]);
     }
 
-}
-
-/*
-void MainWindow::textChanged() {
-    int current_text = comboBox->currenText();
-
-
-}
-
-void MainWindow::Pause() {
+    if(State[5] == 1){
+        ui.state_label_6->setPixmap(m_lightimg[1]);
+    }
+    else{
+        ui.state_label_6->setPixmap(m_lightimg[0]);
+    }
 
 }
-*/
+
+void MainWindow::getReady() {
+    if(Ready == 1){
+        ui.get_ready->setPixmap(m_readyimg[1]);
+    }
+    else{
+        ui.get_ready->setPixmap(m_readyimg[0]);
+    }
+}
+
 
 void MainWindow::AutoDriving() {
     ros_topic_data = 1;
@@ -235,6 +251,11 @@ void MainWindow::Stair() {
     ros_status_flag = true;
 
     ui.mode_ready -> setText("Stair");
+}
+
+void MainWindow::MD() {
+    ros_topic_data = 60;
+    ros_status_flag = true;
 }
 
 void MainWindow::Start() {
@@ -276,6 +297,16 @@ void MainWindow::Off_stair() {
     ros_status_flag = true;
 }
 
+void MainWindow::Off_MD() {     //md_driver
+    ros_topic_data = 61;
+    ros_status_flag = true;
+}
+
+void MainWindow::Refresh_Web() {
+    ros_topic_data = 99;
+    ros_status_flag = true;
+}
+
 
 /*****************************************************************************
 ** Implementation [Menu]
@@ -293,8 +324,8 @@ void MainWindow::ReadSettings() {
     QSettings settings("Qt-Ros Package", "launchgui");
     restoreGeometry(settings.value("geometry").toByteArray());
     restoreState(settings.value("windowState").toByteArray());
-    QString master_url = settings.value("master_url",QString("http://192.168.1.2:11311/")).toString();
-    QString host_url = settings.value("host_url", QString("192.168.1.3")).toString();
+    QString master_url = settings.value("master_url",QString("http://10.30.94.232:11311/")).toString();
+    QString host_url = settings.value("host_url", QString("10.30.93.206")).toString();
     //QString topic_name = settings.value("topic_name", QString("/chatter")).toString();
     ui.line_edit_master->setText(master_url);
     ui.line_edit_host->setText(host_url);

@@ -3,5 +3,7 @@
         <file>images/icon.png</file>
 	<file>images/led-off.png</file>
 	<file>images/led-on.png</file>
+        <file>images/switch1.jpg</file>
+        <file>images/switch2.jpg</file>
     </qresource>
 </RCC>
